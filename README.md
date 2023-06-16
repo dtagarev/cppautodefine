@@ -1,3 +1,2 @@
 # auto-define
-vim plugin
-under construction
+vim plugin, under construction
