@@ -6,11 +6,11 @@
 " regex that finds the function definition
 " regex that finds the function name
 
-function FindAllFunctions() abort
+function autodefine#FindAllFunctions() abort
 	
 endfunction
 
-function DefineCurrFunction()
+function autodefine#DefineCurrFunction()
 	let currFuncNum = line(".")
 	let currFunc = getline(currFuncNum)
 	let currFileName = expand('%')
