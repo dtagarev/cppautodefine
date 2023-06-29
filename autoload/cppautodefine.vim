@@ -6,9 +6,9 @@
 " regex that finds the function definition
 " regex that finds the function name
 
-function cppautodefine#FindAllFunctions() abort
+" function cppautodefine#FindAllFunctions() abort
 	
-endfunction
+" endfunction
 
 function cppautodefine#DefineCurrFunction()
 	let currFuncNum = line(".")
@@ -16,18 +16,19 @@ function cppautodefine#DefineCurrFunction()
 	let currFileName = expand('%')
 	let newFileName = substitute(currFileName , '\..*', '', '')
 	" execute 'echo ' . currFunc . ' >> ' . newFileName
-	execute 'echo ' . currFunc
-	execute 'echo ' . newFileName
+	" execute 'echo "' . currFunc . ' "'
+	echom currFunc
+	" execute 'echo ' . newFileName
 	" execute 'touch ' . newFileName . '.cpp'
 endfunction
 
-function FileExist()
-	return 
-endfunction
-function FindFile()
+" function FileExist()
+" 	return 
+" endfunction
+" function FindFile()
 	
 	
-endfunction
+" endfunction
 
 function! cppautodefine#WriteMessage() abort
   echom 'This is a sample message.'
