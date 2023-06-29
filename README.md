@@ -1,2 +1,2 @@
-# auto-define
+# cppautodefine
 vim plugin, under construction
