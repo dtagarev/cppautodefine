@@ -12,7 +12,10 @@
 
 function! s:CreateNewFile()
 	let currFileName = expand('%:r')
-	execute 'touch ' . currFileName . '.cpp'
+	let test = expand('%:t')
+	echom currFileName
+	echom test
+	" execute 'touch ' . currFileName . '.cpp'
 endfunction
 
 function cppautodefine#DefineCurrFunction()
