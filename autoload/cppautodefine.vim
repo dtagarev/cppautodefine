@@ -15,7 +15,9 @@ function cppautodefine#DefineCurrFunction()
 	let currFunc = getline(currFuncNum)
 	let currFileName = expand('%')
 	let newFileName = substitute(currFileName , '\..*', '', '')
-	execute 'echo ' . currFunc . ' >> ' . newFileName
+	" execute 'echo ' . currFunc . ' >> ' . newFileName
+	execute 'echo ' . currFunc
+	execute 'echo ' . newFileName
 	" execute 'touch ' . newFileName . '.cpp'
 endfunction
 
