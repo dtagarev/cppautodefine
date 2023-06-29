@@ -15,8 +15,8 @@ function cppautodefine#DefineCurrFunction()
 	let currFunc = getline(currFuncNum)
 	let currFileName = expand('%')
 	let newFileName = substitute(currFileName , '\..*', '', '')
-	execute 'touch ' . newFileName . '.cpp'
 	execute 'echo ' . currFunc . ' >> ' . newFileName
+	" execute 'touch ' . newFileName . '.cpp'
 endfunction
 
 function FileExist()
