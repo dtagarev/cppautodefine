@@ -1,4 +1,5 @@
-"find functions ( finds every line where a c++ function is defined
+"
+"ind functions ( finds every line where a c++ function is defined
 "define function (under the cursor);
 "chech if file exist
 "add new function to file
