@@ -18,6 +18,7 @@ function cppautodefine#DefineCurrFunction()
 	" execute 'echo ' . currFunc . ' >> ' . newFileName
 	" execute 'echo "' . currFunc . ' "'
 	echom currFunc
+	echom newFileName
 	" execute 'echo ' . newFileName
 	" execute 'touch ' . newFileName . '.cpp'
 endfunction
