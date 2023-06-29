@@ -6,11 +6,11 @@
 " regex that finds the function definition
 " regex that finds the function name
 
-function autodefine#FindAllFunctions() abort
+function cppautodefine#FindAllFunctions() abort
 	
 endfunction
 
-function autodefine#DefineCurrFunction()
+function cppautodefine#DefineCurrFunction()
 	let currFuncNum = line(".")
 	let currFunc = getline(currFuncNum)
 	let currFileName = expand('%')
@@ -27,6 +27,6 @@ function FindFile()
 	
 endfunction
 
-function! WriteMessage() abort
+function! cppautodefine#WriteMessage() abort
   echom 'This is a sample message.'
 endfunction

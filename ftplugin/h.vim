@@ -1,8 +1,8 @@
-if exists("g:autodefine")
+if exists("g:cppautodefine")
     finish
 endif
 
-command! -buffer DefineFunc call autodefine#DefineCurrFunction()
-command! -buffer Test call autodefine#WriteMessage()
+command! -buffer DefineFunc call cppautodefine#DefineCurrFunction()
+command! -buffer Test call cppautodefine#WriteMessage()
 
-let g:autodefine = 'alright'
+let g:cppautodefine = 'alright'
