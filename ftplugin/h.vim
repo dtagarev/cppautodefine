@@ -3,6 +3,6 @@ if exists("g:cppautodefine")
 endif
 
 command! -buffer DefineFunc call cppautodefine#DefineCurrFunction()
-command! -buffer Test call cppautodefine#WriteMessage()
+" command! -buffer Test call cppautodefine#WriteMessage()
 
 let g:cppautodefine = 'alright'
