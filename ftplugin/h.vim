@@ -1,7 +1,7 @@
-if exists("g:cppsnippets")
+if exists("g:auto-define")
     finish
 endif
 
-command! -buffer DefineFunc call DefineCurrFunction()
+command! -buffer DefineFunc call auto-define#DefineCurrFunction()
 
-let g:cppsnippets = 'alright'
+let g:auto-define = 'alright'
