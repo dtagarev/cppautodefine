@@ -13,7 +13,7 @@
 function cppautodefine#DefineCurrFunction()
 	let currFuncNum = line(".")
 	let currFunc = getline(currFuncNum)
-	let currFileName = expand('%')
+	let currFileName = expand('%:t')
 	let newFileName = substitute(currFileName , '\..*', '', '')
 	" execute 'echo ' . currFunc . ' >> ' . newFileName
 	" execute 'echo "' . currFunc . ' "'
