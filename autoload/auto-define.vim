@@ -26,3 +26,7 @@ function FindFile()
 	
 	
 endfunction
+
+function! WriteMessage() abort
+  echom 'This is a sample message.'
+endfunction
