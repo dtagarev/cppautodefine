@@ -10,22 +10,23 @@
 	
 " endfunction
 
+function! s:CreateNewFile()
+	let currFileName = expand('%:r')
+	execute 'touch ' . currFileName . '.cpp'
+endfunction
+
 function cppautodefine#DefineCurrFunction()
 	let currFuncNum = line(".")
 	let currFunc = getline(currFuncNum)
-	let currFileName = expand('%:t')
-	let newFileName = substitute(currFileName , '\..*', '', '')
-	" execute 'echo ' . currFunc . ' >> ' . newFileName
-	" execute 'echo "' . currFunc . ' "'
+	call s:CreateNewFile()
 	echom currFunc
-	echom newFileName
-	" execute 'echo ' . newFileName
-	" execute 'touch ' . newFileName . '.cpp'
 endfunction
 
-" function FileExist()
-" 	return 
-" endfunction
+
+function FileExist()
+	return 
+endfunction
+
 " function FindFile()
 	
 	
