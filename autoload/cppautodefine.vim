@@ -11,13 +11,10 @@
 " endfunction
 
 function! s:CreateNewFile()
-	let FileName = expand('%:t')
-	" let test = expand('%:t')
-	let currFileName = split(FileName, '.')
-	echom FileName
-	echom currFileName
-	" echom test
-	" execute 'touch ' . get(currFileName, 0) . '.cpp'
+	let fileName = expandcmd('%:t:r') . '.cpp'
+	if s:FileExist(fileName) == 0
+	 silent exec "!touch " . fileName
+	endif
 endfunction
 
 function cppautodefine#DefineCurrFunction()
@@ -27,9 +24,8 @@ function cppautodefine#DefineCurrFunction()
 	" echom currFunc
 endfunction
 
-
-function FileExist()
-	return 
+function! s:FileExist(file)
+	return filereadable(a:file)
 endfunction
 
 " function FindFile()
@@ -38,5 +34,5 @@ endfunction
 " endfunction
 
 function! cppautodefine#WriteMessage() abort
-  echom 'This is a sample message.'
+  echom 'Hellp is a sample message.'
 endfunction
