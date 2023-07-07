@@ -13,11 +13,11 @@
 function! s:CreateNewFile()
 	let FileName = expand('%:t')
 	" let test = expand('%:t')
-	let currFileName = split(FileName, ".")[0:0]
+	let currFileName = split(FileName, ".")
 	echom FileName
 	echom currFileName
 	" echom test
-	execute 'touch ' . currFileName . '.cpp'
+	execute 'touch ' . get(currFileName, 0) . '.cpp'
 endfunction
 
 function cppautodefine#DefineCurrFunction()
