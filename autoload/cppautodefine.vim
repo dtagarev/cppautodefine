@@ -11,7 +11,7 @@
 " endfunction
 
 function! s:CreateNewFile()
-	let currFileName = expand('%:r')
+	let currFileName = expand('%:t')
 	let test = expand('%:t')
 	" echom currFileName
 	" echom test
