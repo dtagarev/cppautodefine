@@ -12,17 +12,17 @@
 
 function! s:CreateNewFile()
 	let fileName = expandcmd('%:t:r')
-	if s:FileExist(fileName) == 0
-	 silent exec "!touch " . fileName . '.cpp'
-        " exe "normal! i#include <" . fileName . ".h>"
-		call writefile(["#include <" . fileName . ".h>", ' '], fileName . '.cpp', "a")
+	if s:FileExist(fileName . '.cpp') == 0
+		silent exec "!touch " . fileName . '.cpp'
+		call writefile(['#include "' . fileName . '.h"', ''], fileName . '.cpp', "a")
 	endif
 	return fileName . ".cpp"
 endfunction
 
 function! cppautodefine#DefineCurrFunction()
 	let currFuncNum = line(".")
-	let currFunc = getline(currFuncNum)
+	let currFunc = substitute(getline(currFuncNum), '^\s*', '', '')
+	let currFunc = substitute(currFunc, ';', '', '')
 	let fileName = s:CreateNewFile()
 	
 	if stridx(currFunc, '{')
@@ -32,6 +32,11 @@ function! cppautodefine#DefineCurrFunction()
 endfunction
 
 function! s:FileExist(file)
+	" if filereadable(a:file) == 1
+	" 	echo "The File exists"
+	" elseif filereadable(a:file) == 0
+	" 	echo "The File doesn't exist"
+	" endif
 	return filereadable(a:file)
 endfunction
 
@@ -40,11 +45,8 @@ endfunction
 	
 " endfunction
 
-function! cppautodefine#WriteMessage() abort
-  echom 'Hellp is a sample message.'
-endfunction
-
 
 " upgrades:
-" FindFile to search one directory back
+" FileExis to search one directory back
+" to work if the file is't in the current dirrectory
 "
