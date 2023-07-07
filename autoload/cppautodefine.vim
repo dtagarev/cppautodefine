@@ -13,7 +13,7 @@
 function! s:CreateNewFile()
 	let FileName = expand('%:t')
 	" let test = expand('%:t')
-	let currFileName = split(FileName, ".")
+	let currFileName = split(FileName, '.')
 	echom FileName
 	echom currFileName
 	" echom test
