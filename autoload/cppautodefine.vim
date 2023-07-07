@@ -24,7 +24,7 @@ function cppautodefine#DefineCurrFunction()
 	let currFuncNum = line(".")
 	let currFunc = getline(currFuncNum)
 	call s:CreateNewFile()
-	echom currFunc
+	" echom currFunc
 endfunction
 
 
