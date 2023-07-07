@@ -11,10 +11,10 @@
 " endfunction
 
 function! s:CreateNewFile()
-	let currFileName = expand('%:t')
+	let currFileName = expand('%:h')
 	let test = expand('%:t')
-	" echom currFileName
-	" echom test
+	echom currFileName
+	echom test
 	execute 'touch ' . currFileName . '.cpp'
 endfunction
 
