@@ -17,7 +17,7 @@ function! s:CreateNewFile()
 	echom FileName
 	echom currFileName
 	" echom test
-	execute 'touch ' . get(currFileName, 0) . '.cpp'
+	" execute 'touch ' . get(currFileName, 0) . '.cpp'
 endfunction
 
 function cppautodefine#DefineCurrFunction()
