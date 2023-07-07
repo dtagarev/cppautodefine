@@ -11,17 +11,24 @@
 " endfunction
 
 function! s:CreateNewFile()
-	let fileName = expandcmd('%:t:r') . '.cpp'
+	let fileName = expandcmd('%:t:r')
 	if s:FileExist(fileName) == 0
-	 silent exec "!touch " . fileName
+	 silent exec "!touch " . fileName . '.cpp'
+        " exe "normal! i#include <" . fileName . ".h>"
+		call writefile(["#include <" . fileName . ".h>", ' '], fileName . '.cpp', "a")
 	endif
+	return fileName . ".cpp"
 endfunction
 
-function cppautodefine#DefineCurrFunction()
+function! cppautodefine#DefineCurrFunction()
 	let currFuncNum = line(".")
 	let currFunc = getline(currFuncNum)
-	call s:CreateNewFile()
-	" echom currFunc
+	let fileName = s:CreateNewFile()
+	
+	if stridx(currFunc, '{')
+		let currFunc = currFunc . " {"
+	endif
+	call writefile([currFunc, "}"], fileName, "a")
 endfunction
 
 function! s:FileExist(file)
@@ -36,3 +43,8 @@ endfunction
 function! cppautodefine#WriteMessage() abort
   echom 'Hellp is a sample message.'
 endfunction
+
+
+" upgrades:
+" FindFile to search one directory back
+"
