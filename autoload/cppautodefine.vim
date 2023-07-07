@@ -14,6 +14,7 @@ function! s:CreateNewFile()
 	let FileName = expand('%:t')
 	" let test = expand('%:t')
 	let currFileName = split(FileName, ".")[1]
+	echom FileName
 	echom currFileName
 	" echom test
 	execute 'touch ' . currFileName . '.cpp'
