@@ -356,6 +356,8 @@ endfunction
 " - inside s:DefineOneFunc the function defined on the last place must be defined to the last plase of the functionList not appended to the file, 
 "   because if inside class it will go after the closing bracket 
 " - not working with the hpp type, only with h 
+" - sometimes teleports the function not in the right place (does not affect
+"   the plugin's work)
 
 " Notes:
 "string - match(), matchstr()
