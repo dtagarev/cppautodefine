@@ -355,6 +355,7 @@ endfunction
 " - to work if the file isn't in the current dirrectory ( maby not possible )
 " - inside s:DefineOneFunc the function defined on the last place must be defined to the last plase of the functionList not appended to the file, 
 "   because if inside class it will go after the closing bracket 
+" - not working with the hpp type, only with h 
 
 " Notes:
 "string - match(), matchstr()
