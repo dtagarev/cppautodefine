@@ -3,6 +3,7 @@ if exists("g:cppautodefine")
 endif
 
 command! -buffer DefineFunc call cppautodefine#DefineCurrFunction()
+command! -buffer DefineAllFunc call cppautodefine#DefineAllFunctions()
 command! -buffer Test call cppautodefine#Test()
 
 

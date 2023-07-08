@@ -1,11 +1,3 @@
-"
-"ind functions ( finds every line where a c++ function is defined
-"define function (under the cursor);
-"chech if file exist
-"add new function to file
-" regex that finds the function definition
-" regex that finds the function name
-
 let s:functionRegexWithCurlyOrig = "[a-zA-Z][a-zA-Z0-9_]*\s\s*[a-zA-Z_][a-zA-Z0-9_]*\s*\\(.*\\)\s*{"
 "
 "
@@ -16,8 +8,13 @@ let s:functionRegexWithoutCurly   = "^\\s*[a-zA-Z][a-zA-Z0-9_]*\\s\\s*[a-zA-Z_][
 
 "string - match(), matchstr()
 "readfile() , readblob()
-"for lists- index(), indexof(), add()
+"for lists- index(), indexof(), add(), insert() , map(), remove()
 
+function! s:SaveFiles()
+	silent execute "wa"
+endfunction
+
+"read from file or read from curr buffer?
 function cppautodefine#FindAllFunctions(fileName)
 	if match(a:fileName, '\.h') != -1 || match(a:fileName, '\.hpp') != -1
 		call s:FindAllFunctionsWork(a:fileName, g:FunctionListHpp, g:FunctionListIdxHpp)
@@ -29,8 +26,17 @@ function cppautodefine#FindAllFunctions(fileName)
 endfunction
 
 function s:FindAllFunctionsWork(fileName, ListContainer, LinNumContainer)
-	echo a:fileName
-	let fileList = readfile(a:fileName)
+	
+	if empty(a:ListContainer) != 1
+		call remove(a:ListContainer, 0, len(a:ListContainer) - 1)
+	endif
+	if empty(a:LinNumContainer) != 1
+		call remove(a:LinNumContainer, 0, len(a:LinNumContainer) - 1) 
+	endif
+	
+	let fileList = readfile(a:fileName) " read from File
+	" let fileList = getline(1, '$') " read from current buffer
+	
 	echo fileList
 	let lineCounter = 1
 	let potencialFunc = 'temp'
@@ -39,10 +45,10 @@ function s:FindAllFunctionsWork(fileName, ListContainer, LinNumContainer)
 		if str != '' && match(str, '^\s*else') == -1
 			if potencialFunc == "temp"
 				if match(str, s:functionRegexWithCurly) != -1 || match(str, s:functionRegexWithColumn) != -1
-					call add(a:ListContainer, str)
+					call add(a:ListContainer, s:cleanFunctionString(str))
 					call add(a:LinNumContainer, lineCounter)
 				elseif match(str, s:functionRegexWithoutCurly) != -1
-					let potencialFunc = str
+					let potencialFunc = s:cleanFunctionString(str)
 					let potencialFuncLN = lineCounter
 				endif
 			elseif potencialFunc != "temp" && match(str, '^\s*{') == 0
@@ -59,27 +65,167 @@ function s:FindAllFunctionsWork(fileName, ListContainer, LinNumContainer)
 	echo a:LinNumContainer
 endfunction
 
-function! s:CreateNewFile()
-	let fileName = expandcmd('%:t:r')
-	if s:FileExist(fileName . '.cpp') == 0
-		silent exec "!touch " . fileName . '.cpp'
-		call writefile(['#include "' . fileName . '.h"', ''], fileName . '.cpp', "a")
-	endif
-	return fileName . ".cpp"
+
+function! s:cleanFunctionString(str)
+	let cleaned_str = substitute(a:str, '\s\+', ' ', 'g')
+	let cleaned_str = substitute(cleaned_str, ';.*' , '', 'g')
+	let cleaned_str = substitute(cleaned_str, '{.*' , '', 'g') 
+	let cleaned_str = substitute(cleaned_str, '^\s\+', '', '')
+    let cleaned_str = substitute(cleaned_str, '\s\+$', '', '')
+    let cleaned_str = substitute(cleaned_str, ' \+', ' ', 'g')
+    let cleaned_str = substitute(cleaned_str, '\s(', '(', '')
+    return cleaned_str
 endfunction
 
-"to-do: fix function type: void func(asdf) { return 1} 
-function! cppautodefine#DefineCurrFunction()
-	let currFuncNum = line(".")
-	let currFunc = substitute(getline(currFuncNum), '^\s*', '', '')
-	let currFunc = substitute(currFunc, ';', '', '')
-	let fileName = s:CreateNewFile()
-	
-	if stridx(currFunc, '{')
-		let currFunc = currFunc . " {"
+" make it user edditable to choose between h hpp or custom
+function! s:CreateNewFile(str)
+	let fileName = expandcmd('%:t:r')
+	if a:str == '.h'
+		echo "Currently not supporting header files"
+	elseif a:str == '.cpp'
+		if s:FileExist(fileName . a:str) == 0
+			silent exec "!touch " . fileName . a:str
+			call writefile(['#include "' . fileName . '.h"', ''], fileName . a:str, "a")
+		endif
+	else
+		echo "Unsupported filetype"
 	endif
-	call writefile([currFunc, "}"], fileName, "a")
+	
+	return fileName . a:str
 endfunction
+function! MatchIndex(hayStack, hayStackLN, needle, needleLN) 
+	
+endfunction
+
+function! cppautodefine#DefineCurrFunction()
+	
+	"!!!!! save the files
+	call s:SaveFiles()
+
+	if match(expandcmd('%:t'), '\.h') == -1 && match(expandcmd('%:t'), '\.hpp') == -1
+		echo "Error: This command works only in header files"
+		return 
+	endif
+	
+	let currFuncNum = line(".")
+	let currFunc = getline(currFuncNum)
+	let currFunc = s:cleanFunctionString(currFunc)
+
+	call cppautodefine#FindAllFunctions(expandcmd('%:t'))
+	let currFuncIdx = index(g:FunctionListHpp, currFunc)
+	
+	if currFuncIdx == -1
+		echo "Error: Line under the cursor is not a function"
+		return
+	endif
+	
+	let otherfile = expandcmd('%:t:r') . '.cpp'
+	call cppautodefine#FindAllFunctions(otherfile)
+	
+	if index(g:FunctionListCpp, currFunc) >= 0 
+		echo "This function is allready defined"
+		return
+	endif
+	
+	let funcLN = s:DefineOneFunc(currFunc, '.cpp')
+	
+	if funcLN != -1 
+		silent execute "e +" . funcLN . ' ' . otherfile
+	else
+		echo "Error: Function not added"
+	endif
+	
+endfunction
+
+function! cppautodefine#DefineAllFunctions()
+	"!!!!! save the files
+	call s:SaveFiles()
+	
+	if match(expandcmd('%:t'), '\.h') == -1 && match(expandcmd('%:t'), '\.hpp') == -1
+		echo "Error: This command works only in header files"
+		return 
+	endif
+	
+	call cppautodefine#FindAllFunctions(expandcmd('%:t'))
+	let otherfile = expandcmd('%:t:r') . '.cpp'
+	call cppautodefine#FindAllFunctions(otherfile)
+	
+	let counter = 0
+	
+	for fn in g:FunctionListHpp
+		if index(g:FunctionListCpp, fn) == -1
+			call s:DefineOneFunc(fn, '.cpp')
+			let counter = counter + 1
+		endif
+	endfor
+	echo counter . " functions defined"
+endfunction
+
+
+
+
+"assumes the funcion is not defined 
+function! s:DefineOneFunc(prettyFName, ext)
+	
+	if a:ext == ".cpp"
+		let ourF = g:FunctionListHpp
+		let ourFLN = g:FunctionListIdxHpp
+		let otherF = g:FunctionListCpp
+		let otherFLN = g:FunctionListIdxCpp
+	else
+		let ourF = g:FunctionListCpp
+		let ourFLN = g:FunctionListIdxCpp
+		let otherF = g:FunctionListHpp
+		let otherFLN = g:FunctionListIdxHpp
+	endif
+	
+	
+	let destination = s:CreateNewFile(a:ext)
+	
+	call cppautodefine#FindAllFunctions(destination)
+	
+	if empty(otherF) == 1 
+		let tmp = copy(a:prettyFName) . " {" 
+		call writefile([tmp, "}", ''], destination, "a")
+		call cppautodefine#FindAllFunctions(destination)
+		let prettyIdx = index(otherF, a:prettyFName)
+		return otherFLN[prettyIdx]
+	endif
+	
+	let alreadyDefined = []
+	
+	for fn in ourF
+		if fn != a:prettyFName	
+			if index(otherF, fn) >= 0
+				call add(alreadyDefined, ourFLN[index(ourF, fn)])
+			endif
+		endif
+	endfor
+	
+	call sort(alreadyDefined)
+	let prettyLN = ourFLN[index(ourF, a:prettyFName)]
+	
+	for num in alreadyDefined
+		if prettyLN < num 
+			let afterF = ourF[index(ourFLN, num)]
+			let afterFLN = otherFLN[index(otherF, afterF)]
+			let content = readfile(destination)
+			call insert(content, copy(a:prettyFName) . ' {', afterFLN - 1)
+			call insert(content, '}', afterFLN)
+			call insert(content, '', afterFLN + 1)
+			call writefile(content, destination)
+			return afterFLN
+		endif
+	endfor
+	
+	let tmp = copy(a:prettyFName) . " {" 
+	call writefile([tmp, "}", ''], destination, "a")
+	call cppautodefine#FindAllFunctions(destination)
+	let prettyIdx = index(otherF, a:prettyFName)
+	return otherFLN[prettyIdx]
+	
+endfunction
+
 " findfile() ??
 function! s:FileExist(file)
 	" if filereadable(a:file) == 1
@@ -101,8 +247,7 @@ endfunction
 	
 " endfunction
 
-
 " upgrades:
-" FileExis to search one directory back
-" to work if the file is't in the current dirrectory
-"
+" FileExis to search one directory back ( drawbacks: can jump out of the last folder of the project
+" to work if the file is't in the current dirrectory ( maby not possible )
+" Mirror ( only for the function under the cursor 
