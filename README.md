@@ -39,7 +39,7 @@ The commands work both in header and cpp files.
 
 | Command                             | Description                                                                                         |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------  |
-| `DefineFunc`                        | Defines the function under the cursor. If the corresponding file doesn't exist, one is created. If you are inside a header file it teleports you to the cpp file so you can start typing right away    |
+| `DefineFunc`                        | Defines the function under the cursor. If the corresponding file doesn't exist, one is created. If you are inside a header file it teleports you to the cpp file so you can start typing right away.   |
 | `DefineAllFunc`                     | Defines all functions in the current file. If the corresponding file doesn't exist, one is created. |
 | `MirrorFunc`                        | Renames the function under the cursor in both the header and the cpp file.                          |
 
