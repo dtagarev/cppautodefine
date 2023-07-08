@@ -10,34 +10,44 @@ let s:functionRegexWithCurlyOrig = "[a-zA-Z][a-zA-Z0-9_]*\s\s*[a-zA-Z_][a-zA-Z0-
 "
 "
 "
-let s:functionRegexWithCurly     = "^[a-zA-Z][a-zA-Z0-9_]*\\s\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*\\(.*\\)\\s*{"
-let s:functionRegexWithoutCurly  = "^[a-zA-Z][a-zA-Z0-9_]*\\s\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*\\(.*\\)\\s*"
+let s:functionRegexWithCurly      = "^\\s*[a-zA-Z][a-zA-Z0-9_]*\\s\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*{"
+let s:functionRegexWithColumn     = "^\\s*[a-zA-Z][a-zA-Z0-9_]*\\s\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*;"
+let s:functionRegexWithoutCurly   = "^\\s*[a-zA-Z][a-zA-Z0-9_]*\\s\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*"
+
 "string - match(), matchstr()
 "readfile() , readblob()
 "for lists- index(), indexof(), add()
 
-let g:FunctionListCpp = []
-let g:FunctionListIdxCpp = []
+function cppautodefine#FindAllFunctions(fileName)
+	if match(a:fileName, '\.h') != -1 || match(a:fileName, '\.hpp') != -1
+		call s:FindAllFunctionsWork(a:fileName, g:FunctionListHpp, g:FunctionListIdxHpp)
+	elseif match(a:fileName, '.cpp') != -1
+		call s:FindAllFunctionsWork(a:fileName, g:FunctionListCpp, g:FunctionListIdxCpp)
+	else
+		echo "Error: Unsupported filetype"
+	endif
+endfunction
 
-function cppautodefine#FindAllFunctionsCpp(fileName) abort
+function s:FindAllFunctionsWork(fileName, ListContainer, LinNumContainer)
+	echo a:fileName
 	let fileList = readfile(a:fileName)
 	echo fileList
 	let lineCounter = 1
 	let potencialFunc = 'temp'
 	let potencialFuncLN = -1
 	for str in fileList
-		if str != '' && match(str, '^else') == -1
+		if str != '' && match(str, '^\s*else') == -1
 			if potencialFunc == "temp"
-				if match(str, s:functionRegexWithCurly) != -1 
-					call add(g:FunctionListCpp, str)
-					call add(g:FunctionListIdxCpp, lineCounter)
+				if match(str, s:functionRegexWithCurly) != -1 || match(str, s:functionRegexWithColumn) != -1
+					call add(a:ListContainer, str)
+					call add(a:LinNumContainer, lineCounter)
 				elseif match(str, s:functionRegexWithoutCurly) != -1
 					let potencialFunc = str
 					let potencialFuncLN = lineCounter
 				endif
 			elseif potencialFunc != "temp" && match(str, '^\s*{') == 0
-				call add(g:FunctionListCpp, potencialFunc)
-				call add(g:FunctionListIdxCpp, potencialFuncLN)
+				call add(a:ListContainer, potencialFunc)
+				call add(a:LinNumContainer, potencialFuncLN)
 				let potencialFunc = "temp"
 				let potencialFuncLN = -1
 			endif
@@ -45,8 +55,8 @@ function cppautodefine#FindAllFunctionsCpp(fileName) abort
 		
 		let lineCounter = lineCounter + 1
 	endfor
-	echo g:FunctionListCpp
-	echo g:FunctionListIdxCpp
+	echo a:ListContainer
+	echo a:LinNumContainer
 endfunction
 
 function! s:CreateNewFile()
@@ -81,8 +91,9 @@ function! s:FileExist(file)
 endfunction
 
 function! cppautodefine#Test()
-	let fileName = expandcmd('%:t:r') . '.cpp'
-	call cppautodefine#FindAllFunctionsCpp(fileName)
+	let fileName = expandcmd('%:t')
+	" echo match(fileName, '.h')
+	call cppautodefine#FindAllFunctions(fileName)
 endfunction
 
 " function FindFile()

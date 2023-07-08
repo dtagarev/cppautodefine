@@ -4,5 +4,8 @@ endif
 
 let g:loaded_cppautodefine = '0.1.0' " version number
 
-command! -buffer Test call cppautodefine#Test()
-command! -buffer DefineFunc call cppautodefine#DefineCurrFunction()
+let g:FunctionListCpp = []
+let g:FunctionListIdxCpp = []
+
+let g:FunctionListHpp = []
+let g:FunctionListIdxHpp = []
