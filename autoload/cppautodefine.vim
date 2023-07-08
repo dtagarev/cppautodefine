@@ -73,6 +73,7 @@ function! s:CreateNewFile(str)
 	if a:str == '.h'
 		if s:FileExist(fileName . a:str) == 0
 			silent exec "!touch " . fileName . a:str
+			call writefile(['#include <iostream>', ''], fileName . a:str, "a")
 			exe 'normal! ggO#include "'. fileName . a:str . '"'
 		endif
 	elseif a:str == '.cpp'
@@ -350,8 +351,10 @@ function! s:SaveFiles()
 endfunction
 
 " upgrades:
-" FileExis to search one directory back ( drawbacks: can jump out of the last folder of the project )
-" to work if the file isn't in the current dirrectory ( maby not possible )
+" - FileExis to search one directory back ( drawbacks: can jump out of the last folder of the project )
+" - to work if the file isn't in the current dirrectory ( maby not possible )
+" - inside s:DefineOneFunc the function defined on the last place must be defined to the last plase of the functionList not appended to the file, 
+"   because if inside class it will go after the closing bracket 
 
 " Notes:
 "string - match(), matchstr()
