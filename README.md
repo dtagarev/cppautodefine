@@ -46,4 +46,8 @@ The commands work both in header and cpp files.
 ### Example mappings
 
 ```vim
+"C++ auto-define
+nmap df :DefineFunc<CR>
+nmap da :DefineAllFunc<CR>
+nmap mr :MirrorFunc<CR>
 ```
