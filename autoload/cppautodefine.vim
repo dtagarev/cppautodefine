@@ -218,8 +218,15 @@ function! cppautodefine#MirrorFunc()
 	let newFunc = s:cleanFunctionString(input("Mirror function: ", currFunc))
 	redraw
 	
+	let targetFuncLN = otherFLN[targetFuncIdx]
+	let content = readfile(otherfile)
+	
 	if ext == '.cpp'
-		let changedFunc = newFunc . ' {'
+		if match(content[targetFuncLN - 1], '{.*') != -1
+			let changedFunc = newFunc . ' {'
+		else
+			let changedFunc = newFunc
+		endif
 		let newFunc = newFunc . ';'
 	else
 		let changedFunc = newFunc . ';'
@@ -229,8 +236,6 @@ function! cppautodefine#MirrorFunc()
 	endif
 	
 	
-	let targetFuncLN = otherFLN[targetFuncIdx]
-	let content = readfile(otherfile)
 	call remove(content, targetFuncLN - 1)
 	call insert(content, changedFunc , targetFuncLN - 1)
 	call writefile(content, otherfile)
