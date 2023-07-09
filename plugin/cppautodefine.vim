@@ -7,4 +7,9 @@ if exists('g:loaded_cppautodefine')
 endif
 
 let g:loaded_cppautodefine = '0.1.0' " version number
+let s:keepcpo = &cpo
+set cpo&vim
 
+
+let &cpo = s:keepcpo
+unlet s:keepcpo
