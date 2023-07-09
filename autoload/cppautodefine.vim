@@ -1,10 +1,11 @@
 "error - when opening new file( on new buffer ) the functions cannot be used
 
-let s:functionRegexWithColumnOrig     = "^\\s*[a-zA-Z][a-zA-Z0-9_]*\\s\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*;"
+" let s:functionRegexWithColumnOrig     = "^\\s*[a-zA-Z][a-zA-Z0-9_]*\\s\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*;"
+let s:functionRegexWithCurlyOrig      = "^\\s*[a-zA-Z][a-zA-Z0-9_]*<\\=.*>\\=\\s\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*{"
 
-let s:functionRegexWithCurly      = "^\\s*[a-zA-Z][a-zA-Z0-9_]*<\\=.*>\\=\\s\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*{"
-let s:functionRegexWithColumn     = "^\\s*[a-zA-Z][a-zA-Z0-9_]*<\\=.*>\\=\\s\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*;"
-let s:functionRegexWithoutCurly   = "^\\s*[a-zA-Z][a-zA-Z0-9_]*<\\=.*>\\=\\s\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*"
+let s:functionRegexWithCurly      = "^\\s*[a-zA-Z][a-zA-Z0-9_]*<\\=.*>\\=\\**\\s\\**\\s*\\**[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*{"
+let s:functionRegexWithColumn     = "^\\s*[a-zA-Z][a-zA-Z0-9_]*<\\=.*>\\=\\**\\s\\**\\s*\\**[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*;"
+let s:functionRegexWithoutCurly   = "^\\s*[a-zA-Z][a-zA-Z0-9_]*<\\=.*>\\=\\**\\s\\**\\s*\\**[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*"
 
 
 
@@ -358,6 +359,8 @@ endfunction
 " - not working with the hpp type, only with h 
 " - sometimes teleports the function not in the right place (does not affect
 "   the plugin's work)
+" - inside a class autmatically add the tabulation
+" - if inside class - to define it propperly in the cpp file
 
 " Notes:
 "string - match(), matchstr()
