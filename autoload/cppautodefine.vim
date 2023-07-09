@@ -7,6 +7,12 @@ let s:functionRegexWithCurly      = "^\\s*[a-zA-Z][a-zA-Z0-9_]*<\\=.*>\\=\\**\\s
 let s:functionRegexWithColumn     = "^\\s*[a-zA-Z][a-zA-Z0-9_]*<\\=.*>\\=\\**\\s\\**\\s*\\**[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*;"
 let s:functionRegexWithoutCurly   = "^\\s*[a-zA-Z][a-zA-Z0-9_]*<\\=.*>\\=\\**\\s\\**\\s*\\**[a-zA-Z_][a-zA-Z0-9_]*\\s*(.*)\\s*"
 
+let g:FunctionListCpp = []
+let g:FunctionListIdxCpp = []
+
+let g:FunctionListHpp = []
+let g:FunctionListIdxHpp = []
+
 
 
 function cppautodefine#FindAllFunctions(fileName)
