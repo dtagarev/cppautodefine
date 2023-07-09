@@ -1,3 +1,4 @@
+*cppautodefine.txt*
 ==============================================================================
 CONTENTS                                                    *cppautodefine*   *cppautodefine-contents*
 	
