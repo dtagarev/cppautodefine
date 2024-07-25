@@ -5,7 +5,7 @@
 ## About
 
 A simple vim plugin to automatically define C++ functions.
-It is designed to releave you from the burden of always switching between header and cpp files.
+It is designed to relieve you from the burden of always switching between header and cpp files.
 With this plugin you can manage the function definitions inside both files and easily create new functions.
 No need to create the corresponding files, they will be automatically created.
 
